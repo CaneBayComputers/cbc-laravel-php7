@@ -10,3 +10,8 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/public/adminer.php
+/public/ocp.php
+/docker-php7-laravel
+/psysh
+/public/assets/img
