@@ -14,9 +14,19 @@ use Illuminate\Support\Facades\View;
 |
 */
 
+Route::get('/', function () {
+
+    $view = 'content.index';
+
+    if( ! View::exists($view) ) abort(404);
+
+    return view($view);
+
+});
+
 Route::get('{slug}', function ($template) {
 
-    if( $template == '/' ) $template = 'index';
+    if( $template == '' ) $template = 'index';
 
     $view = 'content.' . str_replace('/', '.', $template);
 
