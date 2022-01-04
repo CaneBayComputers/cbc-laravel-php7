@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('content.index');
-});
+Route::get('{slug}', function ($template) {
+
+    if( $template == '/' ) $template = 'index';
+
+    $view = 'content.' . str_replace('/', '.', $template);
+
+    if( ! View::exists($view) ) abort(404);
+
+    return view($view);
+
+})->where('slug', '^[A-Za-z0-9_\/\-]+$');
