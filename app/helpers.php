@@ -5,6 +5,36 @@ function cdn($url = '')
     return env('CDN_HOST', '') . $url;
 }
 
+function scripts($url = '')
+{
+    return cdn('/scripts/' . $url);
+}
+
+function styles($url = '')
+{
+    return cdn('/styles/' . $url);
+}
+
+function css($url = '')
+{
+    return cdn('/css/' . $url);
+}
+
+function js($url = '')
+{
+    return cdn('/js/' . $url);
+}
+
+function images($url = '')
+{
+    return cdn('/images/' . $url);
+}
+
+function fonts($url = '')
+{
+    return cdn('/fonts/' . $url);
+}
+
 function _c($str, $default = null)
 {
     return config($str, $default);
