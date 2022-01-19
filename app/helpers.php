@@ -1,5 +1,10 @@
 <?php
 
+function is_dev()
+{
+    return ! app()->environment('production');
+}
+
 function cdn($url = '')
 {
     return env('CDN_HOST', '') . $url;
