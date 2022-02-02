@@ -35,6 +35,11 @@ function images($url = '')
     return cdn('/images/' . $url);
 }
 
+function img($url = '')
+{
+    return cdn('/img/' . $url);
+}
+
 function fonts($url = '')
 {
     return cdn('/fonts/' . $url);
