@@ -5,44 +5,63 @@ function is_dev()
     return ! app()->environment('production');
 }
 
+function is_prod()
+{
+    return ! is_dev();
+}
+
 function cdn($url = '')
 {
     return env('CDN_HOST', '') . $url;
 }
 
-function scripts($url = '')
+function scripts($url = '', $cdn = true)
 {
-    return cdn('/scripts/' . $url);
+    $url = '/scripts/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function styles($url = '')
+function styles($url = '', $cdn = true)
 {
-    return cdn('/styles/' . $url);
+    $url = '/styles/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function css($url = '')
+function css($url = '', $cdn = true)
 {
-    return cdn('/css/' . $url);
+    $url = '/css/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function js($url = '')
+function js($url = '', $cdn = true)
 {
-    return cdn('/js/' . $url);
+    $url = '/js/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function images($url = '')
+function images($url = '', $cdn = true)
 {
-    return cdn('/images/' . $url);
+    $url = '/images/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function img($url = '')
+function img($url = '', $cdn = true)
 {
-    return cdn('/img/' . $url);
+    $url = '/img/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
-function fonts($url = '')
+function fonts($url = '', $cdn = true)
 {
-    return cdn('/fonts/' . $url);
+    $url = '/fonts/' . $url;
+
+    return $cdn ? cdn($url) : $url;
 }
 
 function _c($str, $default = null)
