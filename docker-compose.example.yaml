@@ -1,13 +1,13 @@
 services:
   server:
-    build: ./cbs-docker-php7-nginx
-    image: cbs-docker-php7-nginx
+    build: ./cbc-docker-php7-nginx
+    image: cbc-docker-php7-nginx
     container_name: cbs-some-container-name
     entrypoint: [ "bash", "-c", "sleep 5 && nginx && php-fpm7.4 -F"]
     volumes:
       - .:/usr/share/nginx/html
-      - ./cbs-docker-php7-nginx/ssl:/etc/nginx/certs
-      - ./cbs-docker-php7-nginx/nginx/site.conf:/etc/nginx/sites-enabled/default
+      - ./cbc-docker-php7-nginx/ssl:/etc/nginx/certs
+      - ./cbc-docker-php7-nginx/nginx/site.conf:/etc/nginx/sites-enabled/default
     networks:
       default:
         ipv4_address: 10.2.0.30
@@ -15,4 +15,4 @@ services:
 networks:
   default:
     external: true
-    name: cbs-docker-stack_vpcbr
+    name: cbc-docker-stack_vpcbr
