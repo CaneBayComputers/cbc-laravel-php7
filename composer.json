@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "CaneBayComputers/cbc-laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "A web site framework based on Laravel!",
     "keywords": [
         "framework",
         "laravel"
