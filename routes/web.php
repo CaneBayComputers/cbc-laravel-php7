@@ -24,11 +24,15 @@ Route::get('/', function () {
 
 });
 
+Route::post('forms/{form}', 'Form@process')->where('form', '^[A-Za-z0-9_\/\-]+$');
+
 Route::get('{slug}', function ($template) {
 
     if( $template == '' ) $template = 'index';
 
     $view = 'content.' . str_replace('/', '.', $template);
+
+    if( is_prod() && strpos($view, 'content.examples') !== false ) abort(404);
 
     if( ! View::exists($view) ) abort(404);
 

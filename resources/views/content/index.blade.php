@@ -1,9 +1,5 @@
-<html>
+@extends('templates.main')
 
-<body>
-
-   <h1>Cane Bay Computers &amp; Mobile</h1>
-
-</body>
-
-</html>
+@section('content')
+<h1>This is your index page!</h1>
+@endsection

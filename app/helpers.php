@@ -2,7 +2,7 @@
 
 function is_dev()
 {
-    return ! app()->environment('production');
+    return app()->environment('local');
 }
 
 function is_prod()

@@ -2,7 +2,7 @@ services:
   server:
     build: ./cbc-docker-php7-nginx
     image: cbc-docker-php7-nginx
-    container_name: cbc-some-container-name
+    container_name: cbc-laravel
     entrypoint: [ "bash", "-c", "sleep 5 && nginx && supervisord && php-fpm7.4 -F"]
     volumes:
       - .:/usr/share/nginx/html
