@@ -12,6 +12,8 @@ npm-debug.log
 yarn-error.log
 /public/adminer.php
 /public/ocp.php
+/public/css/app.css
+/public/js/app.js
 /docker-php7-laravel
 /psysh
 /public/assets/img
