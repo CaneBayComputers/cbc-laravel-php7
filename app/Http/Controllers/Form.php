@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContactForm;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Jenssegers\Agent\Agent;
@@ -16,14 +18,14 @@ class Form extends Controller
 
         if( ! $form ) abort(404);
 
-        $validator = Validator::make($request->all(), $form['rules']);
+        $form_data = $request->all();
+
+        $validator = Validator::make($form_data, $form['rules']);
 
         if( $validator->fails() )
         {
             return back()->withErrors($validator)->withInput();
         }
-
-        $redirect = redirect($form['return_to']);
 
         $remoteip = $_SERVER['REMOTE_ADDR'];
 
@@ -39,7 +41,7 @@ class Form extends Controller
 
         $form_data['languages'] = implode(', ', $agent->languages());
 
-        $form_data['remote_address']['ip'] = $remoteip;
+        $form_data['ip'] = $remoteip;
 
 
         // Reject too many attempts with same IP
@@ -54,7 +56,7 @@ class Form extends Controller
 
         if( ! is_dev() && $req_count > _c('form.ip_max_attempts_per_timeframe') )
         {
-            return $redirect->with('error', 'Too many attempts');
+            return back()->withErrors(['Too many attempts'])->withInput();
         }
 
         Cache::increment($cache_key);
@@ -63,7 +65,7 @@ class Form extends Controller
         // Eval user agent
         if( $form_data['device_type'] == 'Robot' )
         {
-            return $redirect->with('error', 'Device type is robot');
+            return back()->withErrors(['Device type is robot'])->withInput();
         }
 
 
@@ -72,9 +74,7 @@ class Form extends Controller
         {
             if( preg_match('/http(s)*:/i', $form_data['message']) )
             {
-                $msg = 'Please remove links and resubmit.';
-
-                return $redirect->with('warning', $msg);
+                return back()->withErrors(['Please remove links'])->withInput();
             }
         }
 
@@ -104,18 +104,22 @@ class Form extends Controller
 
         if( ! isset($recaptcha_result['score']) )
         {
-            $msg = 'Recaptcha score not set';
-
-            return $redirect->with('error', $msg);
+            abort(500, 'Recaptcha score not set');
         }
 
         if ( $recaptcha_result['score'] < _c('form.recaptcha.threshold') )
         {
-            $msg = 'Your request appears automated.<br>Please retry.';
-
-            return $redirect->with('error', $msg);
+            return back()->withErrors(['Request appears automated'])->withInput();
         }
 
-        _l($form_data);
+        unset($form_data['g-recaptcha-response']);
+
+        unset($form_data['recaptcha']);
+
+        unset($form_data['_token']);
+
+        Mail::to(env('FORM_MAIL_TO'))->send(new ContactForm($form_data));
+
+        return back()->with('success', true);
     }
 }

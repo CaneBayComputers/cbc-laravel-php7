@@ -21,8 +21,6 @@ return [
 
 		'contact' => [
 
-			'return_to' => '/examples/form',
-
 			'subject' => env('APP_NAME', 'Laravel') . ' Contact Form',
 
 			'rules' => [
@@ -30,9 +28,8 @@ return [
 				'phone' => 'required_without:email|max:100',
 				'recaptcha' => 'required|string',
 				'message' => 'required|string|max:7000',
-				'name' => 'required_without_all:first_name,last_name|string|min:3|max:100',
-				'first_name' => 'required_without:name|string|max:40',
-				'last_name' => 'required_without:name|string|max:40',
+				'name' => 'required_without:company|string|min:2|max:100',
+				'company' => 'required_without:name|string|min:2|max:100',
 				'timezone' => 'string',
 			],
 		],
