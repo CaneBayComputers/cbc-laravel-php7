@@ -8,6 +8,8 @@
 
 @yield('content')
 
+@stack('script')
+
 </body>
 
 </html>

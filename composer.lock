@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec1299225d0f288fbd4c4f59fef5e7c5",
+    "content-hash": "2ff4ab1a285bd11fa44da1e8bea03099",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1034,6 +1034,50 @@
             "time": "2022-02-23T14:25:13+00:00"
         },
         {
+            "name": "google/apiclient-services",
+            "version": "v0.253.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/googleapis/google-api-php-client-services.git",
+                "reference": "70c62b17f7821526cb52c6f125254dc51f256109"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/70c62b17f7821526cb52c6f125254dc51f256109",
+                "reference": "70c62b17f7821526cb52c6f125254dc51f256109",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.7||^8.5.13"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "autoload.php"
+                ],
+                "psr-4": {
+                    "Google\\Service\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Client library for Google APIs",
+            "homepage": "http://developers.google.com/api-client-library/php",
+            "keywords": [
+                "google"
+            ],
+            "support": {
+                "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.253.0"
+            },
+            "time": "2022-06-13T01:06:12+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "7.4.2",
             "source": {
@@ -1490,6 +1534,73 @@
                 }
             ],
             "time": "2020-06-13T08:05:20+00:00"
+        },
+        {
+            "name": "jeroen-g/flickr",
+            "version": "V2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Jeroen-G/Flickr.git",
+                "reference": "1256bce9f30786cbef27e8e03623e7ee2a4683f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Jeroen-G/Flickr/zipball/1256bce9f30786cbef27e8e03623e7ee2a4683f7",
+                "reference": "1256bce9f30786cbef27e8e03623e7ee2a4683f7",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^9.0",
+                "vlucas/phpdotenv": "^5.3"
+            },
+            "suggest": {
+                "illuminate/support": "This package provides a Laravel Service Provider"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JeroenG\\Flickr\\FlickrServiceProvider"
+                    ],
+                    "aliases": {
+                        "Flickr": "JeroenG\\Flickr\\FlickrLaravelFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JeroenG\\Flickr\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "EUPL-1.1"
+            ],
+            "authors": [
+                {
+                    "name": "JeroenG",
+                    "email": "jeroengjeroeng@gmail.com",
+                    "homepage": "https://github.com/Jeroen-G"
+                }
+            ],
+            "description": "Modern PHP package to make Flickr API calls. Ships with Laravel implementation.",
+            "homepage": "https://github.com/Jeroen-G/Flickr",
+            "keywords": [
+                "JeroenG",
+                "api",
+                "flickr",
+                "laravel",
+                "php"
+            ],
+            "support": {
+                "issues": "https://github.com/Jeroen-G/Flickr/issues",
+                "source": "https://github.com/Jeroen-G/Flickr/tree/V2.2.0"
+            },
+            "time": "2021-05-11T13:29:17+00:00"
         },
         {
             "name": "laminas/laminas-code",
