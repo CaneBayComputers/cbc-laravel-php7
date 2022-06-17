@@ -7,7 +7,6 @@
 <script>
 
 function onSubmit(token) {
-	console.debug(token);
 	var timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 	document.getElementById('timezone-input').value = timezone;
 	document.getElementById('recaptcha-input').value = token;

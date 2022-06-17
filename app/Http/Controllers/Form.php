@@ -18,13 +18,15 @@ class Form extends Controller
 
         if( ! $form ) abort(404);
 
+        $redirect = redirect($form['return_to']);
+
         $form_data = $request->all();
 
         $validator = Validator::make($form_data, $form['rules']);
 
         if( $validator->fails() )
         {
-            return back()->withErrors($validator)->withInput();
+            return $redirect->withErrors($validator)->withInput();
         }
 
         $remoteip = $_SERVER['REMOTE_ADDR'];
@@ -56,7 +58,7 @@ class Form extends Controller
 
         if( ! is_dev() && $req_count > _c('form.ip_max_attempts_per_timeframe') )
         {
-            return back()->withErrors(['Too many attempts'])->withInput();
+            return $redirect->withErrors(['Too many attempts'])->withInput();
         }
 
         Cache::increment($cache_key);
@@ -65,7 +67,7 @@ class Form extends Controller
         // Eval user agent
         if( $form_data['device_type'] == 'Robot' )
         {
-            return back()->withErrors(['Device type is robot'])->withInput();
+            return $redirect->withErrors(['Device type is robot'])->withInput();
         }
 
 
@@ -74,7 +76,7 @@ class Form extends Controller
         {
             if( preg_match('/http(s)*:/i', $form_data['message']) )
             {
-                return back()->withErrors(['Please remove links'])->withInput();
+                return $redirect->withErrors(['Please remove links'])->withInput();
             }
         }
 
@@ -109,7 +111,7 @@ class Form extends Controller
 
         if ( $recaptcha_result['score'] < _c('form.recaptcha.threshold') )
         {
-            return back()->withErrors(['Request appears automated'])->withInput();
+            return $redirect->withErrors(['Request appears automated'])->withInput();
         }
 
         unset($form_data['g-recaptcha-response']);
@@ -120,6 +122,6 @@ class Form extends Controller
 
         Mail::to(env('FORM_MAIL_TO'))->send(new ContactForm($form_data));
 
-        return back()->with('success', true);
+        return $redirect->with('success', true);
     }
 }

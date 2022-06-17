@@ -21,6 +21,8 @@ return [
 
 		'contact' => [
 
+			'return_to' => '/examples/contact',
+
 			'subject' => env('APP_NAME', 'Laravel') . ' Contact Form',
 
 			'rules' => [
