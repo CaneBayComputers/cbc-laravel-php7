@@ -18,11 +18,19 @@ class Form extends Controller
 
         if( ! $form ) abort(404);
 
-        $redirect = redirect($form['return_to']);
-
         $form_data = $request->all();
 
         $validator = Validator::make($form_data, $form['rules']);
+
+        if( ! empty($form_data['return_to']))
+        {
+            $redirect = redirect($form_data['return_to']);
+        }
+
+        else
+        {
+            $redirect = back();
+        }
 
         if( $validator->fails() )
         {

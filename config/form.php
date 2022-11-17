@@ -21,8 +21,6 @@ return [
 
 		'contact' => [
 
-			'return_to' => '/examples/contact',
-
 			'subject' => env('APP_NAME', 'Laravel') . ' Contact Form',
 
 			'rules' => [
@@ -33,6 +31,7 @@ return [
 				'name' => 'required_without:company|string|min:2|max:100',
 				'company' => 'required_without:name|string|min:2|max:100',
 				'timezone' => 'string',
+				'return_to' => 'string',
 			],
 		],
 	],
