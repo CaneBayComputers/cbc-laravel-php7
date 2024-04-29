@@ -1,5 +1,5 @@
 {
-    "name": "canebaycomputers/cbc-laravel",
+    "name": "canebaycomputers/cbc-laravel-php7",
     "type": "project",
     "description": "A web site framework based on Laravel!",
     "keywords": [
@@ -29,9 +29,6 @@
     },
     "config": {
         "optimize-autoloader": true,
-        "platform": {
-            "php": "7.4"
-        },
         "preferred-install": "dist",
         "sort-packages": true
     },

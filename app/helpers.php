@@ -69,6 +69,7 @@ function _c($str, $default = null)
     return config($str, $default);
 }
 
+/*
 function _l(...$params)
 {
     $out = '';
@@ -99,3 +100,4 @@ function _l(...$params)
 
     logger($out);
 }
+*/
