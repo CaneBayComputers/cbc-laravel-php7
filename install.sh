@@ -13,5 +13,3 @@ chmod 777 bootstrap/cache
 composer --ignore-platform-reqs install
 
 npm install
-
-npm run dev
