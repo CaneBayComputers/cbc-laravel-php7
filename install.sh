@@ -63,7 +63,9 @@ if [[ "$DEV_MODE" == true ]]; then
 
 		sed -i "s/cbc-laravel-php7/$REPO_NAME/g" .env
 
-		art-laravel-php7 key:generate
+		if [ "$(docker container inspect -f '{{.State.Running}}' $REPO_NAME)" != "true" ]; then dockerup; fi
+
+		dockerexec --user developer $REPO_NAME php /usr/share/nginx/html/artisan key:generate
 
 	fi
 
