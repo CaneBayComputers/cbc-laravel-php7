@@ -65,13 +65,15 @@ if [[ "$DEV_MODE" == true ]]; then
 
 		if [ "$(docker container inspect -f '{{.State.Running}}' $REPO_NAME)" != "true" ]; then dockerup; fi
 
-		dockerexec --user developer $REPO_NAME php /usr/share/nginx/html/artisan key:generate
+		art-docker key:generate
 
 	fi
 
 	composer --ignore-platform-reqs install
 
 	npm install
+
+	npm run dev
 
 else
 
