@@ -32,8 +32,6 @@ Route::get('{slug}', function ($template) {
 
     $view = 'content.' . str_replace('/', '.', $template);
 
-    if( is_prod() && strpos($view, 'content.examples') !== false ) abort(404);
-
     if( ! View::exists($view) ) abort(404);
 
     return view($view);
