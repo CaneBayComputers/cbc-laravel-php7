@@ -61,6 +61,12 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	fi
 
+	echo; echo
+
+	if dockerup; then true; fi
+
+	echo; echo
+
 	if ! [ -f .env ]; then
 
 		cp -f .env.docker .env
@@ -68,8 +74,6 @@ if [[ "$DEV_MODE" == true ]]; then
 		sed -i "s/cbc-laravel-php7/$REPO_NAME/g" .env
 
 		sed -i "s/cbc_laravel_php7/$REPO_NAME_SNAKE/g" .env
-
-		if [ "$(docker container inspect -f '{{.State.Running}}' $REPO_NAME)" != "true" ]; then dockerup; fi
 
 		art-docker key:generate
 
