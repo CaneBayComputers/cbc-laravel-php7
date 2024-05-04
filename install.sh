@@ -65,6 +65,8 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	upcbcstack
 
+	repos; cd $REPO_NAME
+
 	dockerup
 
 	echo; echo
