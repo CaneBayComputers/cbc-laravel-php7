@@ -63,7 +63,9 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	echo; echo
 
-	if dockerup; then true; fi
+	upcbcstack
+
+	dockerup
 
 	echo; echo
 
