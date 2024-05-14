@@ -24,7 +24,7 @@ Route::get('/', function () {
 
 });
 
-Route::post('forms/{form}', 'Form@process')->where('form', '^[A-Za-z0-9_\/\-]+$');
+Route::post('forms/{form}', 'Form@process')->where('form', '^[A-Za-z0-9_\-]+$');
 
 Route::get('{slug}', function ($template) {
 

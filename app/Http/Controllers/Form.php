@@ -128,7 +128,9 @@ class Form extends Controller
 
         unset($form_data['_token']);
 
-        Mail::to(env('FORM_MAIL_TO'))->send(new ContactForm($form_data));
+        if( is_dev() ) _l($form_data);
+
+        if( $mail_to = env('FORM_MAIL_TO') ) Mail::to($mail_to)->send(new ContactForm($form_data));
 
         return $redirect->with('success', true);
     }
