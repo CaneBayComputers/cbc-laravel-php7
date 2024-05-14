@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.4",
+        "canebaycomputers/ip-api": "^1.0",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
         "google/apiclient-services": "^0.253.0",
@@ -27,6 +28,12 @@
         "nunomaduro/collision": "^4.3",
         "phpunit/phpunit": "^8.5.8|^9.3.3"
     },
+    "repositories": [
+        {
+            "url": "https://github.com/CaneBayComputers/ip-api.git",
+            "type": "git"
+        }
+    ],
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",

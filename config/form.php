@@ -27,12 +27,14 @@ return [
 				'email' => 'required_without:phone|email|max:100',
 				'phone' => 'required_without:email|max:100',
 				'recaptcha' => 'required|string',
-				'message' => 'required|string|max:7000',
+				'message' => 'required|string|max:2000',
 				'name' => 'required_without:company|string|min:2|max:100',
 				'company' => 'required_without:name|string|min:2|max:100',
 				'timezone' => 'string',
 				'return_to' => 'string',
 			],
+
+			'mail_to' => env('CONTACT_FORM_MAIL_TO'),
 		],
 	],
 ];

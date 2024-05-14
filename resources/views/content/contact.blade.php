@@ -1,3 +1,9 @@
+<?php
+
+$site_key = _c('form.recaptcha.site_key');
+
+?>
+
 @extends('templates.main')
 
 @section('content')
@@ -6,9 +12,17 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-6 mx-auto">
-            @if(Session::flash('success'))
+            @if(session('success'))
             <div class="alert alert-success" role="alert">
                 Message has been sent!
+            </div>
+            @elseif($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
             @endif
             <h2>Contact Us</h2>
@@ -31,7 +45,7 @@
                         <option value="">Select a subject</option>
                         <option value="general">General Inquiry</option>
                         <option value="support">Technical Support</option>
-                        <option value="billing">Billing & Payments</option>
+                        <option value="billing">Billing &amp; Payments</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -66,10 +80,12 @@
                 </div>
                 <div class="mb-3">
                     <label for="message" class="form-label">Message</label>
-                    <textarea name="message" maxlength="7000" class="form-control" id="message" rows="4" placeholder="Enter your message" required></textarea>
+                    <textarea name="message" maxlength="2000" class="form-control" id="message" rows="4" placeholder="Enter your message" required></textarea>
                 </div>
+                @csrf
                 <input type="hidden" id="timezone" name="timezone" value="">
-                <button class="btn btn-primary g-recaptcha" data-sitekey="{!! _c('form.recaptcha.site_key') !!}" data-callback='onSubmit' data-action='submit'>Submit</button>
+                <input type="hidden" id="recaptcha" name="recaptcha" value="">
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
@@ -79,16 +95,22 @@
 
 @push('script')
 
-<script src="https://www.google.com/recaptcha/api.js"></script>
+<script src="https://www.google.com/recaptcha/api.js?render={!! $site_key !!}"></script>
 
 <script>
-function onSubmit(token) {
-    document.getElementById("contact-form").submit();
-}
-</script>
 
-<script>
+document.getElementById('contact-form').onsubmit = function(e) {
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{!! $site_key !!}', {action: 'submit'}).then(function(token) {
+            document.getElementById("recaptcha").value = token;
+            e.target.submit();
+        });
+    });
+    return false;
+};
+
 document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
 </script>
 
 @endpush

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactForm;
+use ElFactory\IpApi\IpApi;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
@@ -50,8 +52,6 @@ class Form extends Controller
         $form_data['browser'] = $agent->browser();
 
         $form_data['languages'] = implode(', ', $agent->languages());
-
-        $form_data['ip'] = $remoteip;
 
 
         // Reject too many attempts with same IP
@@ -122,15 +122,31 @@ class Form extends Controller
             return $redirect->withErrors(['Request appears automated'])->withInput();
         }
 
+
+        // IP info
+        try
+        {
+            $form_data['ip'] = IpApi::default($remoteip)->lookup();
+        }
+
+        catch(Exception $e)
+        {
+            $form_data['ip'] = $remoteip;
+        }
+
+
+        // Unset unecessary data
         unset($form_data['g-recaptcha-response']);
 
         unset($form_data['recaptcha']);
 
         unset($form_data['_token']);
 
+
+        // Log, save and email form
         if( is_dev() ) _l($form_data);
 
-        if( $mail_to = env('FORM_MAIL_TO') ) Mail::to($mail_to)->send(new ContactForm($form_data));
+        if( $form['mail_to'] ) Mail::to($form['mail_to'])->send(new ContactForm($form_data));
 
         return $redirect->with('success', true);
     }
