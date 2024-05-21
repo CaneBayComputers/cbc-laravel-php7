@@ -75,16 +75,6 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	echo; echo
 
-	upcbcstack
-
-	repos; cd $REPO_NAME
-
-	sleep 5
-
-	dockerup
-
-	echo; echo
-
 	if ! [ -f .env ]; then
 
 		cp -f .env.docker .env
@@ -93,21 +83,14 @@ if [[ "$DEV_MODE" == true ]]; then
 
 		sed -i "s/cbc_laravel_php7/$REPO_NAME_SNAKE/g" .env
 
-		art-docker key:generate
+		# Generate a random 32 character string
+		APP_KEY=$(openssl rand -base64 1000 | tr -dc 'a-zA-Z0-9' | head -c 32)
 
-	fi
+		# Define the new APP_KEY line
+		NEW_APP_KEY_LINE="APP_KEY=$APP_KEY"
 
-    if ! mysql -h"cbc-mariadb" -u"root" -e "USE $REPO_NAME_SNAKE;" 2>/dev/null; then
-
-        mysql -h"cbc-mariadb" -u"root" -e "CREATE DATABASE IF NOT EXISTS $REPO_NAME_SNAKE;"
-
-    fi
-
-    art-docker migrate
-
-	if npm install; then
-
-		if npm run dev; then true; fi
+		# Replace the third line in the .env file with the new APP_KEY line
+		sed -i "3s/.*/$NEW_APP_KEY_LINE/" .env
 
 	fi
 
@@ -134,3 +117,5 @@ setfacl -m "default:group::rw" storage/logs
 chmod 777 storage/temp
 
 chmod 777 bootstrap/cache
+
+touch is_installed
