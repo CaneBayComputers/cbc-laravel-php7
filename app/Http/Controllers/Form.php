@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ContactForm;
+use App\FormSubmission;
 use ElFactory\IpApi\IpApi;
 use Exception;
 use Illuminate\Http\Request;
@@ -124,14 +125,19 @@ class Form extends Controller
 
 
         // IP info
-        try
-        {
-            $form_data['ip'] = IpApi::default($remoteip)->lookup();
-        }
+        $form_data['ip'] = $remoteip;
 
-        catch(Exception $e)
+        if( ! is_dev() )
         {
-            $form_data['ip'] = $remoteip;
+            try
+            {
+                $form_data['ip'] = IpApi::default($remoteip)->lookup();
+            }
+
+            catch(Exception $e)
+            {
+                //
+            }
         }
 
 
@@ -141,6 +147,14 @@ class Form extends Controller
         unset($form_data['recaptcha']);
 
         unset($form_data['_token']);
+
+
+        // Save to database in case we don't get the email
+        $form_submission = new FormSubmission;
+
+        $form_submission->data = $form_data;
+
+        $form_submission->save();
 
 
         // Log, save and email form
