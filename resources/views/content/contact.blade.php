@@ -29,23 +29,23 @@ $site_key = _c('form.recaptcha.site_key');
             <form action="/forms/contact" id="contact-form" method="post">
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Full Name</label>
-                    <input type="text" maxlength="100" name="name" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                    <input type="text" maxlength="100" name="name" class="form-control" id="fullName" placeholder="Enter your full name" value="{{ old('name') }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email Address</label>
-                    <input type="email" maxlength="100" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    <input type="email" maxlength="100" name="email" class="form-control" id="email" placeholder="Enter your email" value="{{ old('email') }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="phone" class="form-label">Phone Number</label>
-                    <input type="tel" maxlength="100" name="phone" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                    <input type="tel" maxlength="100" name="phone" class="form-control" id="phone" placeholder="Enter your phone number" value="{{ old('phone') }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="subject" class="form-label">Subject</label>
                     <select name="subject" class="form-select" id="subject" required>
                         <option value="">Select a subject</option>
-                        <option value="general">General Inquiry</option>
-                        <option value="support">Technical Support</option>
-                        <option value="billing">Billing &amp; Payments</option>
+                        <option value="general" {{ old('subject') == 'general' ? 'selected' : '' }}>General Inquiry</option>
+                        <option value="support" {{ old('subject') == 'support' ? 'selected' : '' }}>Technical Support</option>
+                        <option value="billing" {{ old('subject') == 'billing' ? 'selected' : '' }}>Billing &amp; Payments</option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -80,7 +80,7 @@ $site_key = _c('form.recaptcha.site_key');
                 </div>
                 <div class="mb-3">
                     <label for="message" class="form-label">Message</label>
-                    <textarea name="message" maxlength="2000" class="form-control" id="message" rows="4" placeholder="Enter your message" required></textarea>
+                    <textarea name="message" maxlength="2000" class="form-control" id="message" rows="4" placeholder="Enter your message" required>{{ old('message') }}</textarea>
                 </div>
                 @csrf
                 <input type="hidden" id="timezone" name="timezone" value="">

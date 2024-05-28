@@ -8,6 +8,8 @@ use ElFactory\IpApi\IpApi;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -97,30 +99,30 @@ class Form extends Controller
             'remoteip' => $remoteip,
         ];
 
-        $recaptcha_options = [
-            'http' => [
-                'header' => "Content-type: application/x-www-form-urlencoded",
-                'method' => 'POST',
-                'content' => http_build_query($recaptcha_data),
-            ]
-        ];
-        
-        $context = stream_context_create($recaptcha_options);
-
-        $recaptcha_result = file_get_contents(_c('form.recaptcha.url'), false, $context);
-
-        $recaptcha_result = json_decode($recaptcha_result, true);
-
-        $request_data['recaptcha_result'] = $recaptcha_result;
-
-        if( ! isset($recaptcha_result['score']) )
+        try
         {
-            abort(500, 'Recaptcha score not set');
+            $response = Http::timeout(2)->asForm()->post(_c('form.recaptcha.url'), $recaptcha_data);
+
+            $recaptcha_result = $response->json();
+
+            $request_data['recaptcha_result'] = $recaptcha_result;
+
+            if( ! isset($recaptcha_result['score']) )
+            {
+                throw new Exception('Recaptcha score returned blank');
+            }
+
+            if ( $recaptcha_result['score'] < _c('form.recaptcha.threshold') )
+            {
+                throw new Exception('Request appears automated');
+            }
         }
 
-        if ( $recaptcha_result['score'] < _c('form.recaptcha.threshold') )
+        catch(Exception $e)
         {
-            return $redirect->withErrors(['Request appears automated'])->withInput();
+            Log::error($e);
+
+            return $redirect->withErrors([$e->getMessage()])->withInput();
         }
 
 
@@ -136,7 +138,7 @@ class Form extends Controller
 
             catch(Exception $e)
             {
-                //
+                Log::warning($e);
             }
         }
 
