@@ -2,13 +2,17 @@
 
 set -e
 
-source ~/repos/cbc-development-setup/.bash_aliases
-
 shopt -s expand_aliases
 
-if [[ "$(whoami)" == "root" ]]; then echo-red "Do NOT run with sudo!"; exit 1; fi
+ORIG_DIR=$(pwd)
+
+cd $(dirname "$(realpath "$0")")
+
+source ../../extras/.bash_aliases
 
 unalias cp
+
+if [[ "$(whoami)" == "root" ]]; then echo-red "Do NOT run with sudo!"; exit 1; fi
 
 DEV_MODE=false
 
@@ -31,34 +35,15 @@ while [[ "$#" -gt 0 ]]; do
 
 done
 
-REPO_NAME=$(basename $(pwd))
+PROJECT_NAME=$(basename $(pwd))
 
-echo; echo-cyan "Installing $REPO_NAME ..."; echo-white
+echo; echo-cyan "Installing $PROJECT_NAME ..."; echo-white
 
-REPO_NAME_SNAKE=$(echo "$REPO_NAME" | tr '[:upper:]' '[:lower:]' | tr '-' '_')
+PROJECT_NAME_SNAKE=$(echo "$PROJECT_NAME" | tr '[:upper:]' '[:lower:]' | tr '-' '_')
 
 if [[ "$DEV_MODE" == true ]]; then
 
-	if dockerls | grep $REPO_NAME > /dev/null; then
-
-		dockerdown
-
-	fi
-
-	if ! dockerls | grep cbc-mariadb > /dev/null; then
-
-		upcbcstack
-
-		sleep 5
-
-	fi
-
-	if [ ! -f "vendor/composer/installed.json" ]; then
-
-		composer --ignore-platform-reqs install
-
-	fi
-	
+	# Get a random D class number and make sure it doesn' already exist in hosts file	
 	while true; do
 
 		D_CLASS=$((RANDOM % (250 - 100 + 1) + 100))
@@ -69,9 +54,10 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	done
 
+	# Write the new project host and Docker IP address
 	while true; do
 
-		HOST_LINE=$(cat /etc/hosts | grep -n -m 1 $REPO_NAME | cut -d : -f 1)
+		HOST_LINE=$(cat /etc/hosts | grep -n -m 1 $PROJECT_NAME | cut -d : -f 1)
 
 		if ! [[ -z $HOST_LINE ]]; then
 
@@ -85,31 +71,41 @@ if [[ "$DEV_MODE" == true ]]; then
 
 	done
 
-	echo "$IP_ADDRESS      $REPO_NAME" | sudo tee -a /etc/hosts
+	echo "$IP_ADDRESS      $PROJECT_NAME" | sudo tee -a /etc/hosts
 
  	cp -f docker-compose.example.yaml docker-compose.yaml
 
  	sed -i "s/10\.2\.0\.30/$IP_ADDRESS/g" docker-compose.yaml
 
- 	sed -i "s/cbc-laravel-php7/$REPO_NAME/g" docker-compose.yaml
+ 	sed -i "s/cbc-laravel-php7/$PROJECT_NAME/g" docker-compose.yaml
 
- 	dockerup
+ 	cd ../../scripts
+
+ 	source startup.sh $PROJECT_NAME
+
+ 	cd ../projects/$PROJECT_NAME
+
+ 	if [ ! -f "vendor/composer/installed.json" ]; then
+
+		composer --ignore-platform-reqs install
+
+	fi
 
 	if ! [ -f .env ]; then
 
 		cp -f .env.docker .env
 
-		sed -i "s/cbc-laravel-php7/$REPO_NAME/g" .env
+		sed -i "s/cbc-laravel-php7/$PROJECT_NAME/g" .env
 
-		sed -i "s/cbc_laravel_php7/$REPO_NAME_SNAKE/g" .env
+		sed -i "s/cbc_laravel_php7/$PROJECT_NAME_SNAKE/g" .env
 
 		art-docker key:generate
 
 	fi
 
-	if ! mysql -h"cbc-mariadb" -u"root" -e "USE $REPO_NAME_SNAKE;" 2>/dev/null; then
+	if ! mysql -h"cbc-mariadb" -u"root" -e "USE $PROJECT_NAME_SNAKE;" 2>/dev/null; then
 
-        mysql -h"cbc-mariadb" -u"root" -e "CREATE DATABASE IF NOT EXISTS $REPO_NAME_SNAKE;"
+        mysql -h"cbc-mariadb" -u"root" -e "CREATE DATABASE IF NOT EXISTS $PROJECT_NAME_SNAKE;"
 
     fi
 
