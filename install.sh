@@ -8,9 +8,7 @@ ORIG_DIR=$(pwd)
 
 cd $(dirname "$(realpath "$0")")
 
-source ../../extras/.bash_aliases
-
-unalias cp
+echo; echo
 
 if [[ "$(whoami)" == "root" ]]; then echo-red "Do NOT run with sudo!"; exit 1; fi
 
@@ -22,6 +20,8 @@ while [[ "$#" -gt 0 ]]; do
 
         --dev)
             DEV_MODE=true
+            source ../../extras/.bash_aliases
+			unalias cp
             ;;
 
         *)
@@ -85,9 +85,13 @@ if [[ "$DEV_MODE" == true ]]; then
 
  	cd ../projects/$PROJECT_NAME
 
+ 	echo; echo
+
  	if [ ! -f "vendor/composer/installed.json" ]; then
 
 		composer --ignore-platform-reqs install
+
+		echo; echo
 
 	fi
 
@@ -101,17 +105,19 @@ if [[ "$DEV_MODE" == true ]]; then
 
 		art-docker key:generate
 
+		echo; echo
+
 	fi
 
 	if ! mysql -h"cbc-mariadb" -u"root" -e "USE $PROJECT_NAME_SNAKE;" 2>/dev/null; then
 
         mysql -h"cbc-mariadb" -u"root" -e "CREATE DATABASE IF NOT EXISTS $PROJECT_NAME_SNAKE;"
 
+        echo; echo
+
     fi
 
     art-docker migrate
-
-	echo; echo
 
 else
 
@@ -125,7 +131,11 @@ else
 
 	fi
 
+	php artisan migrate
+
 fi
+
+echo; echo
 
 find storage/framework -maxdepth 1 -type d -exec chmod 777 {} +
 
