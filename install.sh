@@ -81,7 +81,7 @@ if [[ "$DEV_MODE" == true ]]; then
 
  	cd ../../scripts
 
- 	source startup.sh $PROJECT_NAME
+ 	source startup.sh --no-status $PROJECT_NAME
 
  	cd ../projects/$PROJECT_NAME
 
@@ -118,6 +118,12 @@ if [[ "$DEV_MODE" == true ]]; then
     fi
 
     art-docker migrate
+
+    cd ../../scripts
+
+ 	source status.sh $PROJECT_NAME
+
+ 	cd ../projects/$PROJECT_NAME
 
 else
 
