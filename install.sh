@@ -79,11 +79,11 @@ if [[ "$DEV_MODE" == true ]]; then
 
  	sed -i "s/cbc-laravel-php7/$PROJECT_NAME/g" docker-compose.yaml
 
- 	cd ../../scripts
+ 	# cd ../../scripts
 
- 	source startup.sh --no-status $PROJECT_NAME
+ 	# source startup.sh --no-status $PROJECT_NAME
 
- 	cd ../projects/$PROJECT_NAME
+ 	# cd ../projects/$PROJECT_NAME
 
  	echo; echo
 
